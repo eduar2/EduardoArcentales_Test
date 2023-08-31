@@ -1,73 +1,59 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Test with NodeJS, NestJS, TypeScript, TypeORM, MySQL
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+El proyecto se conecta con una base de datos MySQL. Puede ser creada una BD que se tenga localmente, o en caso de no contar con el cliente, ejecutar el comando:
+```
+docker compose up -d
+```
+Para instalar las dependencias requeridas, ejecutar el comando:
+```
+npm install
+```
+Para ejecutar el proyecto, se puede ejecutar el comando 
+```
+npm start
 ```
 
-## Running the app
+### Tests 
+Para ejecutar los tests ejecutar el comando:
+`npm test`
+*Pendiente añadir más tests
 
-```bash
-# development
-$ npm run start
+### Usar un cliente REST para probar los endpoints.
 
-# watch mode
-$ npm run start:dev
+Una vez que el proyecto se esté ejecutando, se pueden probar los siguientes endpoints:
 
-# production mode
-$ npm run start:prod
-```
+Organizaciones (todas las organizaciones):
+GET  [http://localhost:3000/api/v1/organizations/](http://localhost:3000/api/v1/organizations/)
 
-## Test
 
-```bash
-# unit tests
-$ npm run test
+Obtener una organización específica:
+GET  [http://localhost:3000/api/v1/organizations/1](http://localhost:3000/api/v1/organizations/1)
 
-# e2e tests
-$ npm run test:e2e
 
-# test coverage
-$ npm run test:cov
-```
+Crear una organización:
+`{"name":"organization 4",
+  "status": 1}`
+POST  [http://localhost:3000/api/v1/organizations](http://localhost:3000/api/v1/organizations/1)
 
-## Support
+Editar una organización:
+`{"name":"Organization edited",
+"status":1}`
+PATCH  [http://localhost:3000/api/v1/organizations/1](http://localhost:3000/api/v1/organizations/1)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Borrar una organización:
+DELETE  [http://localhost:3000/api/v1/organizations/2](http://localhost:3000/api/v1/organizations/2)
 
-## Stay in touch
+Obtener los códigos de verificación de los repositorios:
+GET  [http://localhost:3000/api/v1/repositories](http://localhost:3000/api/v1/repositories)
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+Obtener métricas de repositorios de una tribu (el parámetro corresponde al identificador de la tribu)
+GET  [http://localhost:3000/api/v1/tribes/1/](http://localhost:3000/api/v1/tribes/1/)
 
-Nest is [MIT licensed](LICENSE).
+Obtener métricas en formato csv
+GET  [http://localhost:3000/api/v1/tribes/1/report](http://localhost:3000/api/v1/tribes/1/report)
+
+Todos los endpoints se pueden probar desde Postman (se incluye la colección  ExerciseNodeJS.postman_collection.json que pude ser importada en Postman). También se puede probar desde la siguiente url: 
+
+[http://localhost:3000/swagger](http://localhost:3000/swagger)
