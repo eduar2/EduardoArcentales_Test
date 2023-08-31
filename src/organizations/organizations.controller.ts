@@ -27,7 +27,7 @@ export class OrganizationsController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.organizationsService.findOne(+id);
+    return this.organizationsService.findOrganization(+id);
   }
 
   @Patch(':id')
