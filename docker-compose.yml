@@ -5,10 +5,10 @@ services:
     container_name: mysql_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: passw0rd
-      MYSQL_DATABASE: db_exercise
-      MYSQL_USER: user_admin
-      MYSQL_PASSWORD: passw0rd
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
     volumes:
       - /home/edu/./mysql:/var/lib/mysql
     ports:
