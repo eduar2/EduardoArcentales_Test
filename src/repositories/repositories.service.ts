@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryDto } from './dto/update-repository.dto';
 
 @Injectable()
 export class RepositoriesService {
-  create(createRepositoryDto: CreateRepositoryDto) {
-    return 'This action adds a new repository';
-  }
-
   findAll() {
-    return `This action returns all repositories`;
-  }
+    const repositories = {
+      repositories: [
+        {
+          id: 1,
+          state: 604,
+        },
+        {
+          id: 2,
+          state: 605,
+        },
+        {
+          id: 3,
+          state: 606,
+        },
+      ],
+    };
 
-  findOne(id: number) {
-    return `This action returns a #${id} repository`;
-  }
-
-  update(id: number, updateRepositoryDto: UpdateRepositoryDto) {
-    return `This action updates a #${id} repository`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} repository`;
+    return repositories;
   }
 }

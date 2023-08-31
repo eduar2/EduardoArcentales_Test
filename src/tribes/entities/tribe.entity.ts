@@ -19,6 +19,8 @@ export class Tribe {
   })
   organization: Organization;
 
-  @OneToMany(() => Repository, (repository) => repository.tribe)
+  @OneToMany(() => Repository, (repository) => repository.tribe, {
+    eager: true,
+  })
   repositories: Repository[];
 }

@@ -1,34 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param, Header } from '@nestjs/common';
 import { TribesService } from './tribes.service';
-import { CreateTribeDto } from './dto/create-tribe.dto';
-import { UpdateTribeDto } from './dto/update-tribe.dto';
+// import fs from 'fs';
 
 @Controller('tribes')
 export class TribesController {
   constructor(private readonly tribesService: TribesService) {}
-
-  @Post()
-  create(@Body() createTribeDto: CreateTribeDto) {
-    return this.tribesService.create(createTribeDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.tribesService.findAll();
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tribesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTribeDto: UpdateTribeDto) {
-    return this.tribesService.update(+id, updateTribeDto);
-  }
+  @Get(':id/report')
+  @Header('Content-Type', 'application/csv')
+  @Header('Content-Disposition', 'attachment; filename="metrics.csv"')
+  async getReport(@Param('id') id: string) {
+    const metrics = await this.tribesService.getReport(+id);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tribesService.remove(+id);
+    let csvData =
+      [
+        'id',
+        'name',
+        'tribe',
+        'organization',
+        'coverage',
+        'code_smells',
+        'bugs',
+        'vulnerabilites',
+        'hotspot',
+        'verificationState',
+        'state',
+      ].join(',') + '\r\n';
+    //fs.appendFileSync('./metrics.csv', csvData);
+
+    metrics.forEach((metric) => {
+      // populating the CSV content
+      // and converting the null fields to ""
+      csvData +=
+        [
+          metric.id,
+          metric.name,
+          metric.tribe,
+          metric.organization,
+          metric.coverage,
+          metric.code_smells,
+          metric.bugs,
+          metric.vulnerabilities,
+          metric.hotspot,
+          metric.verificationState,
+          metric.state,
+        ].join(',') + '\r\n';
+      //fs.appendFileSync('./metrics.csv', data);
+    });
+    return csvData;
   }
 }

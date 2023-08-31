@@ -20,12 +20,10 @@ export class Repository {
   @Column('char', { length: 1 })
   status: string;
 
-  @ManyToOne(() => Tribe, (tribe) => tribe.id, {
-    eager: true, // para que traiga las raza al hacer un findOne
-  })
+  @ManyToOne(() => Tribe, (tribe) => tribe.id)
   tribe: Tribe;
 
-  @OneToOne(() => Metric)
+  @OneToOne(() => Metric, { eager: true })
   @JoinColumn()
   metric: Metric;
 }
