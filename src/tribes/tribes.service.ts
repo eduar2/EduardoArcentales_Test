@@ -4,7 +4,9 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RepositoriesService } from 'src/repositories/repositories.service';
 import {
+  coverage,
   coverageIndicator,
+  stateReport,
   states,
   verificationState,
 } from 'src/common/constants';
@@ -36,7 +38,7 @@ export class TribesService {
       }
       const now = new Date();
       const actualYear = now.getFullYear();
-      const repositories = tribe.repositories.filter(
+      let repositories = tribe.repositories.filter(
         (x) => Number(x.create_time.getFullYear()) == actualYear,
       );
 
@@ -46,12 +48,15 @@ export class TribesService {
       const statusVerification = this.repositoriesService.findAll();
 
       const qualityRepositories = repositories.filter(
-        (x) => x.metric.coverage >= 75,
+        (x) => x.metric.coverage >= coverage && x.state == stateReport,
       ).length;
-      console.log(qualityRepositories);
+
       if (qualityRepositories < 1) {
         return 'La Tribu no tiene repositorios que cumplan con la cobertura necesaria';
       }
+      repositories = repositories.filter(
+        (x) => x.metric.coverage >= coverage && x.state == stateReport,
+      );
       const repositoriesMetrics = repositories.map((x) => {
         return {
           id: x.id,
@@ -97,12 +102,6 @@ export class TribesService {
       }
       const statusVerification = this.repositoriesService.findAll();
 
-      const qualityRepositories = repositories.filter(
-        (x) => x.metric.coverage >= 75,
-      ).length;
-      if (qualityRepositories < 1) {
-        return voidResult;
-      }
       const repositoriesMetrics = repositories.map((x) => {
         return {
           id: x.id,

@@ -20,3 +20,4 @@ export const statusMap = {
 };
 
 export const coverage = 75;
+export const stateReport = 'E';
