@@ -14,6 +14,11 @@ export enum status {
   Active,
   Inactive,
 }
+export enum state {
+  E = 'Enabled',
+  D = 'Disabled',
+  A = 'Archived',
+}
 export const statusMap = {
   A: 'Active',
   I: 'Inactive',

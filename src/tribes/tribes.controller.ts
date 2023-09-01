@@ -1,14 +1,32 @@
-import { Controller, Get, Param, Header } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Header,
+  Query,
+  // ParseIntPipe,
+} from '@nestjs/common';
 import { TribesService } from './tribes.service';
 import * as fs from 'fs';
+// import { ApiQuery } from '@nestjs/swagger';
+// import { TribeParametersDTO } from './dto/tribe-parameters.dto';
+import { coverage, stateReport } from 'src/common/constants';
 
 @Controller('tribes')
 export class TribesController {
   constructor(private readonly tribesService: TribesService) {}
+  now = new Date();
+  actualYear = this.now.getFullYear();
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tribesService.findOne(+id);
+  // @ApiQuery({ name: 'year', default: 2023, type: TribeParametersDTO })
+  findOne(
+    @Param('id') id: string,
+    @Query('year') year = this.actualYear,
+    @Query('state') state = stateReport,
+    @Query('coverage') defaultCoverage = coverage,
+  ) {
+    return this.tribesService.findOne(+id, year, state, defaultCoverage);
   }
 
   @Get(':id/report')

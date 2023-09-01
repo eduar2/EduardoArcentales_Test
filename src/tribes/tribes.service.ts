@@ -4,9 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RepositoriesService } from 'src/repositories/repositories.service';
 import {
-  coverage,
   coverageIndicator,
-  stateReport,
   states,
   verificationState,
 } from 'src/common/constants';
@@ -20,9 +18,14 @@ export class TribesService {
     private readonly repositoriesService: RepositoriesService,
   ) {}
 
-  async findOne(id: number) {
+  async findOne(
+    id: number,
+    year: number,
+    state: string,
+    defaultCoverage: number,
+  ) {
     //obtener metricas de tribu
-    return this.getMetrics(id);
+    return this.getMetrics(id, year, state, defaultCoverage);
   }
 
   async getReport(id: number) {
@@ -30,16 +33,19 @@ export class TribesService {
     return await this.getMetricsReport(id);
   }
 
-  private async getMetrics(id: number) {
+  private async getMetrics(
+    id: number,
+    year: number,
+    state: string,
+    defaultCoverage: number,
+  ) {
     try {
       const tribe = await this.tribeRepository.findOneBy({ id });
       if (!tribe) {
         return 'La tribu no se encuentra registrada';
       }
-      const now = new Date();
-      const actualYear = now.getFullYear();
       let repositories = tribe.repositories.filter(
-        (x) => Number(x.create_time.getFullYear()) == actualYear,
+        (x) => Number(x.create_time.getFullYear()) == year,
       );
 
       if (!repositories && repositories.length <= 0) {
@@ -48,14 +54,14 @@ export class TribesService {
       const statusVerification = this.repositoriesService.findAll();
 
       const qualityRepositories = repositories.filter(
-        (x) => x.metric.coverage >= coverage && x.state == stateReport,
+        (x) => x.metric.coverage >= defaultCoverage && x.state == state,
       ).length;
 
       if (qualityRepositories < 1) {
         return 'La Tribu no tiene repositorios que cumplan con la cobertura necesaria';
       }
       repositories = repositories.filter(
-        (x) => x.metric.coverage >= coverage && x.state == stateReport,
+        (x) => x.metric.coverage >= defaultCoverage && x.state == state,
       );
       const repositoriesMetrics = repositories.map((x) => {
         return {
