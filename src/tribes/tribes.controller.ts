@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Header } from '@nestjs/common';
 import { TribesService } from './tribes.service';
-// import fs from 'fs';
+import * as fs from 'fs';
 
 @Controller('tribes')
 export class TribesController {
@@ -31,12 +31,10 @@ export class TribesController {
         'verificationState',
         'state',
       ].join(',') + '\r\n';
-    //fs.appendFileSync('./metrics.csv', csvData);
+    fs.appendFileSync('./metrics.csv', csvData);
 
     metrics.forEach((metric) => {
-      // populating the CSV content
-      // and converting the null fields to ""
-      csvData +=
+      const record: string =
         [
           metric.id,
           metric.name,
@@ -50,8 +48,10 @@ export class TribesController {
           metric.verificationState,
           metric.state,
         ].join(',') + '\r\n';
-      //fs.appendFileSync('./metrics.csv', data);
+      csvData += record;
+      fs.appendFileSync('./metrics.csv', record);
     });
+    fs.unlinkSync('./metrics.csv');
     return csvData;
   }
 }
